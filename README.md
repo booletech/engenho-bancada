@@ -1,53 +1,55 @@
-# Engenho — Bancada de Engenharia
+# Engenho — Bancada de Engenharia · v2.0
 
-Aplicação web em português para apoio a engenheiros eletricistas e eletrônicos. Os cálculos são realizados no navegador, sem cadastro ou envio dos valores a um servidor.
+[Plataforma](https://engenho-bancada.julio623.chatgpt.site) · [Materiais](https://engenho-bancada.julio623.chatgpt.site/#materials)
 
-## Ferramentas da versão 1.0
+22 calculadoras em português para engenharia elétrica e eletrônica. Cálculos no navegador, sem cadastro ou envio dos valores.
 
-Potência e corrente monofásica/trifásica, Lei de Ohm, queda de tensão resistiva, consumo/custo, compensação de fator de potência, divisor com carga, resistor para LEDs, circuito RC, associação de resistores e ADC ideal.
+## Ferramentas
 
-Cada ferramenta inclui validação de entrada, exemplo, unidades, fórmula, memória, hipóteses, referência, cópia e relatório imprimível (Salvar como PDF no navegador). Campos aceitam vírgula ou ponto decimal, sem separador de milhar. Resultados exibem até seis algarismos significativos; essa apresentação não representa precisão metrológica.
+Fundamentos: potência/corrente, Ohm, queda resistiva, energia/custo, fator de potência, divisor com carga, LED, RC, resistores e ADC ideal.
 
-## Executar e verificar
+Avançadas de elétrica: queda AC R/X; falta trifásica em transformador; limite térmico I²t; RLC e ressonância; torque e escorregamento de motor; THD-I parcial.
 
-Requer Node.js. Sem dependências npm.
+Avançadas de eletrônica: op amp e saturação; GBW/ganho de ruído/slew rate; buck/boost CCM; Sallen-Key com Q e ponto de −3 dB; rede térmica de dissipador.
+
+Cada ferramenta possui fórmulas, memória, hipóteses, referência, explicação, exemplo resolvido e erro comum. Filtros por área/nível, cópia e relatório imprimível A4 (Salvar como PDF no navegador).
+
+## Materiais
+
+Dez guias originais em português, exercícios com resolução, trilhas de estudo, fontes dos autores, busca e glossário de 12 conceitos. Sem reprodução de livros completos ou normas.
+
+## Executar
+
+Requer Node.js, sem dependências npm.
 
 ```sh
 npm test
 npm start
 ```
 
-Abra http://127.0.0.1:4173. A pasta `dist` contém o site completo e pode ser hospedada como conteúdo estático. Não exige backend, chave de API ou banco de dados.
+Abra http://127.0.0.1:4173. A pasta dist contém o site estático completo. 34 testes verificam valores conhecidos, balanços físicos, limites, entradas inválidas, avisos de hipótese e catálogo/material.
 
 ## Arquitetura
 
-- `dist/calculations.js`: funções matemáticas puras e validações.
-- `dist/tools.js`: catálogo, unidades, exemplos e referências.
-- `dist/app.js`: interface, relatórios e integração WebMCP opcional.
-- `dist/styles.css`: interface responsiva e impressão A4.
-- `tests/calculations.test.mjs`: resultados conhecidos, casos limite e entradas inválidas.
-- `.openai/hosting.json`: identidade e configuração da hospedagem Sites.
+- dist/calculations.js: funções puras, validações e avisos.
+- dist/tools.js: catálogo, unidades, exemplos e fontes.
+- dist/learning.js: guias, explicações, exercícios e glossário.
+- dist/app.js: interface, relatórios e WebMCP opcional.
+- dist/styles.css: layout responsivo e impressão A4.
+- tests/: modelos básicos e avançados.
+- .github/workflows/checks.yml: testes automáticos no GitHub.
+- .openai/hosting.json: identidade da hospedagem Sites.
 
-## Limites técnicos
+## Limites
 
-A queda de tensão considera FP=1, sem reatância, com resistividade fornecida. Não dimensiona ampacidade, proteção ou conformidade normativa. A compensação de FP considera regime senoidal sem harmônicas. O ADC usa quantização por piso e saturação na referência; consulte a função de transferência real do dispositivo. Os demais modelos e condições estão documentados em cada calculadora.
+Modelos de apoio, sem certificação ou laudo. Seis algarismos significativos de apresentação não representam precisão metrológica. Avisos aparecem para CCM não atendido, saturação e excesso térmico.
 
-Dimensionamento normativo de cabos, proteção, curto-circuito, seletividade, harmônicas, tolerâncias e análise térmica completa não estão implementados. Nenhuma ferramenta emite laudo, certificação ou responsabilidade técnica.
+Não implementa dimensionamento normativo completo, estudo IEC 60909 completo, seletividade, espectro harmônico completo, compensação/perdas de conversores ou modelo térmico transitório. THD é parcial (3ª/5ª/7ª). ADC usa piso e saturação. Confira hipóteses e datasheets.
 
-## Privacidade
+## Privacidade e publicação
 
-Os dados de cálculo ficam em memória na página e se perdem ao recarregar. Não há analytics, cookies de aplicação nem armazenamento de projetos. A hospedagem pode manter logs de acesso. Fontes visuais são carregadas do Google Fonts; há fontes locais de fallback. A cópia usa a área de transferência somente após clique. Referências externas abrem após ação do usuário.
+Dados de cálculo ficam em memória e se perdem ao recarregar. Sem analytics ou cookies de aplicação; a hospedagem pode registrar acessos. Google Fonts fornece fontes com fallback local.
 
-## Atualizar
+Sites exige sincronizar o repositório de hospedagem e publicar uma versão empacotada. GitHub guarda código e documentação; push no GitHub não publica automaticamente no Sites. No Windows, o empacotador usa Bash do Git e TAR_OPTIONS=--force-local.
 
-Edite o módulo correspondente, execute `npm test`, confira a interface e publique a pasta `dist`. Sites exige sincronizar o código no repositório de hospedagem antes de salvar e publicar uma versão. O GitHub guarda uma cópia versionada do projeto; atualizações no GitHub não disparam automaticamente a publicação Sites.
-
-## Evolução priorizada
-
-1. Revisão técnica independente e casos de referência adicionais.
-2. Dimensionamento de condutores com requisitos normativos licenciados e fontes atualizadas.
-3. Projeto salvo online, autenticação e relatórios identificados.
-4. Filtros ativos, amplificadores, reguladores e dissipação térmica.
-5. Pipeline contínuo de atualização e testes de interface.
-
-WebMCP é opcional e detectado por recurso; os navegadores sem suporte continuam funcionando normalmente.
+WebMCP é detectado por recurso; a interface continua funcionando nos navegadores sem suporte.
