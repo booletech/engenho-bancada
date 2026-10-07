@@ -1,3 +1,4 @@
+import {earthTools} from './grounding-content.js';
 const f=(key,label,unit,value,hint='')=>({key,label,unit,value,hint});
 const system={key:'system',label:'Sistema',options:[['mono','Monofásico / dois condutores'],['tri','Trifásico equilibrado']],value:'tri'};
 const schneider={label:'Schneider Electric · Electrical Installation Guide',url:'https://www.electrical-installation.org/enwiki/Calculation_of_voltage_drop_in_steady_load_conditions'};
@@ -29,4 +30,5 @@ tools.push(
  {id:'sallen-key',name:'Filtro ativo · Sallen-Key',area:'Eletrônica',symbol:'f₀',desc:'Frequência natural, Q, resposta e ponto de −3 dB.',level:'Avançado',fields:[f('r','R1 = R2','Ω',10000),f('c','C1 = C2','nF',10),f('k','Ganho não inversor K','V/V','1,585786438','Butterworth ideal: K = 3 − √2.'),f('f','Frequência de análise','Hz',1000)],source:src('Texas Instruments · SLOA024B: Sallen-Key architecture','https://www.ti.com/lit/an/sloa024b/sloa024b.pdf')},
  {id:'thermal',name:'Dissipador · rede térmica',area:'Eletrônica',symbol:'θ',desc:'Temperatura de junção e orçamento térmico do dissipador.',level:'Avançado',fields:[f('p','Potência dissipada','W',10),f('ta','Temperatura ambiente','°C',40),f('tmax','Temperatura limite de projeto','°C',125),f('jc','Junção → encapsulamento θJC','°C/W',2),f('cs','Encapsulamento → dissipador θCS','°C/W','0,5'),f('sa','Dissipador → ambiente θSA','°C/W',4)],source:src('Texas Instruments · SPRABI3B: Thermal design guide','https://www.ti.com/lit/an/sprabi3b/sprabi3b.pdf')}
 );
+tools.push(...earthTools);
 for(const tool of tools)tool.level??='Fundamentos';

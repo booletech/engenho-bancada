@@ -1,14 +1,14 @@
-# Engenho — Bancada de Engenharia · v2.0
+# Engenho — Bancada de Engenharia · v2.1
 
 [Plataforma](https://engenho-bancada.julio623.chatgpt.site) · [Materiais](https://engenho-bancada.julio623.chatgpt.site/#materials)
 
-22 calculadoras em português para engenharia elétrica e eletrônica. Cálculos no navegador, sem cadastro ou envio dos valores.
+27 calculadoras em português para engenharia elétrica e eletrônica. Cálculos no navegador, sem cadastro ou envio dos valores.
 
 ## Ferramentas
 
 Fundamentos: potência/corrente, Ohm, queda resistiva, energia/custo, fator de potência, divisor com carga, LED, RC, resistores e ADC ideal.
 
-Avançadas de elétrica: queda AC R/X; falta trifásica em transformador; limite térmico I²t; RLC e ressonância; torque e escorregamento de motor; THD-I parcial.
+Avançadas de elétrica: queda AC R/X; falta trifásica em transformador; limite térmico I²t; RLC e ressonância; torque e escorregamento de motor; THD-I parcial. Aterramento: Wenner raso, alternativas de hastes/anel, coordenação TT/DR, GPR e dispersão 52/62/72%.
 
 Avançadas de eletrônica: op amp e saturação; GBW/ganho de ruído/slew rate; buck/boost CCM; Sallen-Key com Q e ponto de −3 dB; rede térmica de dissipador.
 
@@ -16,7 +16,7 @@ Cada ferramenta possui fórmulas, memória, hipóteses, referência, explicaçã
 
 ## Materiais
 
-Dez guias originais em português, exercícios com resolução, trilhas de estudo, fontes dos autores, busca e glossário de 12 conceitos. Sem reprodução de livros completos ou normas.
+Doze guias originais em português, exercícios com resolução, trilhas de estudo, fontes dos autores, busca e glossário técnico. Sem reprodução de livros completos ou normas.
 
 ## Executar
 
@@ -27,7 +27,7 @@ npm test
 npm start
 ```
 
-Abra http://127.0.0.1:4173. A pasta dist contém o site estático completo. 34 testes verificam valores conhecidos, balanços físicos, limites, entradas inválidas, avisos de hipótese e catálogo/material.
+Abra http://127.0.0.1:4173. A pasta dist contém o site estático completo. 45 testes verificam valores conhecidos, balanços físicos, limites, entradas inválidas, avisos de hipótese e catálogo/material.
 
 ## Arquitetura
 
@@ -53,3 +53,5 @@ Dados de cálculo ficam em memória e se perdem ao recarregar. Sem analytics ou 
 Sites exige sincronizar o repositório de hospedagem e publicar uma versão empacotada. GitHub guarda código e documentação; push no GitHub não publica automaticamente no Sites. No Windows, o empacotador usa Bash do Git e TAR_OPTIONS=--force-local.
 
 WebMCP é detectado por recurso; a interface continua funcionando nos navegadores sem suporte.
+
+Aterramento: as verificações são parciais. Sem modelagem de malhas, solos em camadas, tensões de toque/passo, impulsos de raio ou certificação NBR 5410/NBR 5419/NBR 15751. GPR não é tensão de toque; relação TT e dispersão de ensaio não aprovam a instalação.

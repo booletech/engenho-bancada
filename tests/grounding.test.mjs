@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {calculate} from '../dist/calculations.js';
+import {earthTools} from '../dist/grounding-content.js';
+const calc=(id,changes={})=>calculate(id,{...Object.fromEntries(earthTools.find(t=>t.id===id).fields.map(f=>[f.key,f.value])),...changes});
+const near=(a,b)=>assert.ok(Math.abs(a-b)<Math.max(1e-9,Math.abs(b)*1e-10),`${a} ≠ ${b}`);
+test('Wenner: unidade Ω·m e conversão Ω·cm',()=>{const o=calc('earth-wenner',{a:10,r:2,b:.5});near(o.values[0].value,40*Math.PI);near(o.values[1].value,4000*Math.PI);near(o.values[2].value,5);});
+test('Wenner: rejeita sondas fora da hipótese rasa',()=>assert.throws(()=>calc('earth-wenner',{a:5,b:.251})));
+test('Eletrodos: alternativas separadas e escala com resistividade',()=>{const o=calc('earth-electrodes');near(o.values[0].value,100/12);near(o.values[1].value,100/3);near(o.values[2].value,5);near(calc('earth-electrodes',{rho:200}).values[0].value,2*o.values[0].value);});
+test('Hastes: influência mútua bloqueia divisão por n; uma haste independe do espaçamento',()=>{assert.throws(()=>calc('earth-electrodes',{spacing:12}));near(calc('earth-electrodes',{n:1,spacing:1}).values[0].value,100/3);assert.throws(()=>calc('earth-electrodes',{n:1.5}));});
+test('TT: relação de sensibilidade distinta da tensão durante a falta',()=>{const o=calc('earth-tt');near(o.values[0].value,30);near(o.values[1].value,50/.3);near(o.values[2].value,500);near(o.values[3].value,230/110);near(o.values[4].value,230*100/110);assert.ok(o.values[4].value>o.values[0].value);assert.match(o.warnings.join(' '),/não comprova/);});
+test('TT: relação excedida e corrente abaixo da sensibilidade geram avisos',()=>{assert.match(calc('earth-tt',{ra:200}).warnings.join(' '),/excede/);assert.match(calc('earth-tt',{rb:10000}).warnings.join(' '),/menor que IΔn/);});
+test('GPR: balanço de corrente e produto IG × Rg',()=>{const o=calc('earth-gpr');near(o.values[0].value,1000);near(o.values[1].value,2);near(o.values[2].value,3);assert.match(o.warnings[0],/não é tensão de toque/);});
+test('GPR: extremos de divisão de corrente e falta zero',()=>{near(calc('earth-gpr',{split:0}).values[0].value,0);near(calc('earth-gpr',{split:1}).values[2].value,0);near(calc('earth-gpr',{i:0}).values[0].value,0);assert.throws(()=>calc('earth-gpr',{split:1.01}));});
+test('Queda de potencial: posições e desvio não dependem de resistência absoluta',()=>{const o=calc('earth-fop');near(o.values[1].value,2);assert.deepEqual(o.values.slice(2).map(v=>v.value),[26,31,36]);near(calc('earth-fop',{r52:98,r62:100,r72:102}).values[1].value,2);});
+test('Queda de potencial: critério do usuário não certifica ensaio',()=>{assert.match(calc('earth-fop',{r72:12}).warnings[0],/acima/);assert.match(calc('earth-fop',{r52:10,r72:10,tol:0}).warnings[0],/validade/);});
+test('Aterramento: inválidos, zero proibido e overflow não produzem resultados',()=>{for(const [id,x] of [['earth-wenner',{r:0}],['earth-wenner',{b:-1}],['earth-electrodes',{rho:0}],['earth-tt',{dr:0}],['earth-tt',{ra:'abc'}],['earth-gpr',{r:-1}],['earth-gpr',{i:1e308}],['earth-fop',{r62:0}],['earth-fop',{tol:101}]])assert.throws(()=>calc(id,x));});

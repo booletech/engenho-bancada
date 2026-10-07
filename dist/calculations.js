@@ -1,5 +1,6 @@
 // Pure engineering models. Inputs in units declared by the tool metadata.
-export const VERSION = '2.0.0';
+import {calculateGrounding} from './grounding.js';
+export const VERSION = '2.1.0';
 export function number(value) {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
   const raw = String(value ?? '').trim();
@@ -14,6 +15,7 @@ const factor = (x,label) => {const n=p(x,label);if(n>1) throw Error(`${label} de
 const row = (label,value,unit='') => ({label,value,unit});
 function mode(x,allowed){if(!allowed.includes(x))throw Error('Seleção inválida.');return x;}
 export function calculate(id, x) {
+  const earth=calculateGrounding(id,x);if(earth)return {...earth,version:VERSION};
   let values, formula, steps, note;
   const warnings=[];
   switch(id) {
